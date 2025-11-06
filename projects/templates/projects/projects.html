@@ -2,31 +2,6 @@
 
  {% block content %}
 
-
-
-{% comment %} <table>
-{% for project in projects %} 
-    <tr> {% endcomment %}
-         
-         
-
-        {% comment %} <td>{{project.title}}</td>
-
-        <td>{{project.vote_ratio}}</td>  
-
-        <td>{{project.vote_total}}</td>
-
-        <td>{{project.created}}</td> {% endcomment %}
-
-        {% comment %} <td><a href="{% url 'update-project' project.id %}">Edit</a></td>
-
-        <td><a href="{% url 'delete-project' project.id %}">Delete</a></td>
-
-        <td><a href="{% url 'project' project.id %}">View</a></td>
-
-    </tr>
-         {% endfor %}
-</table> {% endcomment %}
 <main class="projects">
     <section class="hero-section text-center">
       <div class="container container--narrow">
