@@ -1,0 +1,80 @@
+{% extends "main.html" %}
+
+{% block content %}
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<main class="messagePage my-xl">
+    <div class="content-box">
+        <div class="message">
+            <a class="backButton" href="{% url 'inbox' %}"><i class="im im-angle-left"></i></a>
+            <h2 class="message__subject">{{ message.subject }}</h2>
+            <a href="{% url 'user-profile' message.sender.id %}" class="message__author">{{ message.sender.name }}</a>
+            <p class="message__date">{{ message.created }}</p>
+            <div class="message__body">
+                {{ message.body|linebreaksbr }}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+
+
+
+{% comment %} {% extends "main.html" %}
+
+{% block content %}
+
+   {% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if message %}
+  <div class="message-wrapper">
+    <h2>Message from {{ message.sender.name }}</h2>
+    <p>Subject: {{ message.subject }}</p>
+    <div class="message-body">
+      {{ message.body }}
+    </div>
+    <p class="message-date">Sent on: {{ message.created }}</p>
+    <a class="btn btn-primary" href="{% url 'inbox' %}">Return to Inbox</a>
+  </div>
+{% endif %}
+
+
+
+
+  <!-- Main Section -->
+  <main class="messagePage my-xl">
+    <div class="content-box">
+      <div class="message">
+        <a class="backButton" href="{% url 'inbox' %}"><i class="im im-angle-left"></i></a>
+        <h2 class="message__subject">{{ message.subject }}</h4>
+          <a href="profile.html" class="message__author">{{ message.name }}</a>
+          <p class="message__date">{{ message.created }}</p>
+          <div class="message__body">
+            {{ message.body| linebreaksbr }}
+          </div>
+      </div>
+    </div>
+  </main>
+  {% endblock content %} {% endcomment %}
+
+
+  
