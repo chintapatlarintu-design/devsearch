@@ -170,19 +170,7 @@ def editAccount(request):
     return render(request, 'users/profile_form.html', context)
 
 
-# @login_required(login_url='login')
-# def createSkill(request):
-#     form =   SkillForm()
-#     contex = {'form': form}
-#     return render(request, 'users/skill_form.html', contex)
 
-# # ... (before line 139)
-# def createSkill(request):
-#     # This is likely line 139 where SkillForm is used
-#     form = SkillForm()  # <--- NameError occurs here
-     
-#     if request.method == 'POST':
-#         # ... (rest of the view)
 
 @login_required(login_url='login')
 def createSkill(request):
