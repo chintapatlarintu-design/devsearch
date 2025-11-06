@@ -132,10 +132,7 @@ def projects(request):
         page = paginator.num_pages
         projects = paginator.page(page)
 									  
-								   
-						 
-						 
-
+							
     # Convert the effective page number to an integer for calculations
     # Note: 'page' is now guaranteed to be a string or an integer (from exceptions)
     current_page = int(page)
