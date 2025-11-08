@@ -26,6 +26,7 @@ class Profile(models.Model):
         return self.user.username if self.user and hasattr(self.user, "username") else "No User"
 
 
+
 class Skill(models.Model):
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=200, null=True, blank=True)
