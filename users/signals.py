@@ -67,8 +67,8 @@ def createProfile(sender, instance, created, **kwargs):
                 [profile.email],
                 fail_silently=False,
             )
-        except:
-            print('Email failed to send...')
+        # except:
+        #     print('Email failed to send...')
 
 
 def updateUser(sender, instance, created, **kwargs):
