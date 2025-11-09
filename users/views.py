@@ -20,6 +20,21 @@ from .models import Message
 # Create your views here.
 
 
+def _get_or_create_profile(user):
+    """Return the Profile for a user, creating one with sensible defaults if missing."""
+    if not user:
+        return None
+    profile, created = Profile.objects.get_or_create(
+        user=user,
+        defaults={
+            'username': getattr(user, 'username', '') or '',
+            'email': getattr(user, 'email', '') or '',
+            'name': (user.get_full_name() or user.first_name) if hasattr(user, 'get_full_name') else getattr(user, 'first_name', '')
+        }
+    )
+    return profile
+
+
     
 # Create your views here.
 def loginUser(request):
@@ -138,7 +153,7 @@ def userAccount(request):
     This function was corrected to use a dictionary for context.
     """
     # Use lowercase for the variable name for convention
-    profile = request.user.profile
+    profile = _get_or_create_profile(request.user)
 
     Skills = profile.skill_set.all()
      
@@ -157,7 +172,7 @@ def userAccount(request):
 
 @login_required(login_url='login')
 def editAccount(request):
-    profile = request.user.profile
+    profile = _get_or_create_profile(request.user)
     form = ProfileForm(instance=profile)
 
     if request.method == 'POST':
@@ -174,7 +189,7 @@ def editAccount(request):
 
 @login_required(login_url='login')
 def createSkill(request):
-    profile = request.user.profile
+    profile = _get_or_create_profile(request.user)
 
     form = SkillForm() 
     
@@ -197,7 +212,7 @@ def createSkill(request):
 
 @login_required(login_url='login')
 def updateSkill(request, pk):
-    profile = request.user.profile
+    profile = _get_or_create_profile(request.user)
     skill = profile.skill_set.get(id=pk)
     form = SkillForm(instance=skill) 
     
@@ -216,7 +231,7 @@ def updateSkill(request, pk):
     return render(request, 'users/skill_form.html', context)
 
 def deleteSkill(request, pk):
-    profile = request.user.profile
+    profile = _get_or_create_profile(request.user)
     skill = profile.skill_set.get(id=pk)
     if request.method == 'POST':
         skill.delete()
@@ -230,7 +245,7 @@ def deleteSkill(request, pk):
     
 @login_required(login_url='login')
 def inbox(request):
-    profile = request.user.profile
+    profile = _get_or_create_profile(request.user)
     messageRequests = profile.messages.all()
     unreadCount = messageRequests.filter(is_read=False).count()
     context = {'messageRequests': messageRequests, 'unreadCount': unreadCount}
@@ -259,8 +274,9 @@ def inbox(request):
 def viewMessage(request, pk):
     try:
         message = Message.objects.get(id=pk)
-        
-        if message.recipient == request.user:
+        profile = _get_or_create_profile(request.user)
+        # Ensure recipient check compares profiles
+        if message.recipient == profile:
             message.is_read = True
             message.save()
             context = {'message': message}
@@ -268,7 +284,6 @@ def viewMessage(request, pk):
         else:
             messages.error(request, 'You do not have permission to view this message')
             return redirect('inbox')
-            
     except Message.DoesNotExist:
         messages.error(request, 'Message not found')
         return redirect('inbox')
@@ -279,7 +294,7 @@ def createMessage(request, pk):
     form = MessageForm()
 
     try:
-        sender = request.user.profile
+        sender = _get_or_create_profile(request.user)
     except:
         sender = None
 
